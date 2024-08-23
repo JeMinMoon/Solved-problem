@@ -1,0 +1,75 @@
+#include <string>
+#include <vector>
+#include <stack>
+
+using namespace std;
+
+void split(string& s){
+    int n = s.size();
+    char temp = s[0];
+    for(int i=0; i<n-1; i++){
+        s[i] = s[i+1];
+    }
+    s[n-1] = temp;
+}
+
+int solution(string s) {
+    int answer = 0;
+    int n = s.size();
+    
+    for(int j=0; j<n; j++){
+        bool good_string = true;
+        stack<char> st;
+        for(int i=0; i<n; i++){
+            if(s[i] == '(' || s[i] == '{' || s[i] == '['){
+                st.push(s[i]);
+                continue;
+            }
+            
+            if(st.empty()){
+                if(s[i] == ')' || s[i] == '}' || s[i] == ']'){
+                    good_string = false;
+                    break;
+                }
+            }
+            else {
+                if(s[i] == ')'){
+                    if(st.top() == '('){
+                        st.pop();
+                        continue;
+                    }
+                    else{
+                        good_string = false;
+                        break;
+                    }
+                }
+                else if(s[i] == '}'){
+                    if(st.top() == '{'){
+                        st.pop();
+                        continue;
+                    }
+                    else{
+                        good_string = false;
+                        break;
+                    }
+                }
+                else if(s[i] == ']'){
+                    if(st.top() == '['){
+                        st.pop();
+                        continue;
+                    }
+                    else{
+                        good_string = false;
+                        break;
+                    }
+                }
+            }
+        }
+        if(!st.empty())
+            good_string = false;
+        if(good_string == true)
+            answer++;
+        split(s);
+    }
+    return answer;
+}
